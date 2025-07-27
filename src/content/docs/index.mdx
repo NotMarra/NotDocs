@@ -1,0 +1,30 @@
+---
+title: Welcome to NotDocs
+description: Here you can find the documentation for everything that NotMarra created!
+template: splash
+hero:
+  tagline: Yes here you can find everything!
+  actions:
+    - text: Main Page
+      link: https://notmarra.com
+      icon: external
+    - text: Support NotMarra
+      link: https://ko-fi.com/notmarra
+      icon: external
+      variant: minimal
+---
+
+import { LinkCard, Card, CardGrid } from "@astrojs/starlight/components";
+
+## What can you find here?
+
+<CardGrid stagger>
+  <LinkCard title="NotCredits" href="notcredits/getting-started/" icon="seti:java" description="A plugin that solves all your economy problems! A custom economy that doesn't need Vault or other plugins!"/>
+<LinkCard
+  title="NotLib"
+  href="notlib/getting-started/"
+  icon="seti:java"
+  description="Library for NotPlugins"
+/>
+
+</CardGrid>

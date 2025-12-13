@@ -6,7 +6,11 @@ import starlight from "@astrojs/starlight";
 export default defineConfig({
   integrations: [
     starlight({
-      title: "NotDocs",
+      title: "NotWiki",
+      favicon: "./logo_bg.png",
+      customCss: [
+        './src/styles/custom.css'
+      ],
       logo: {
         src: "./src/assets/logo.svg",
       },
@@ -28,14 +32,18 @@ export default defineConfig({
             {
               label: "Have a problem?",
               link: "https://github.com/NotMarra/NotCredits/issues",
+              attrs: {target: '_blank'}
             },
             {
               label: "Download",
               link: "https://modrinth.com/plugin/notcredits",
+              attrs: {target: '_blank'}
             },
             {
               label: "Developer's API",
               link: "https://github.com/NotMarra/NotCredits/tree/main",
+              attrs: {target: '_blank'},
+              
             },
           ],
         },

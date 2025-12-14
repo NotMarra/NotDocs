@@ -4,6 +4,7 @@ import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://wiki.notmarra.com",
   integrations: [
     starlight({
       title: "NotWiki",

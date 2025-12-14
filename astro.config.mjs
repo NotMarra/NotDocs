@@ -50,12 +50,7 @@ export default defineConfig({
       ],
     }),
   ],
-
-  vite: {
-    preview: {
-      host: true,
-      strictPort: false,
-      allowedHosts: ['*']
-    }
+  server: {
+    allowedHosts: true
   }
 });

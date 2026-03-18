@@ -11,19 +11,18 @@ NotLib requires **Java 21** and **Paper 1.21+** (Folia is also supported).
 
 ```xml
 <repositories>
-  <repository>
-    <id>notmarra-repo</id>
-    <url>https://repo.notmarra.dev/releases</url>
-  </repository>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
 </repositories>
 
 <dependencies>
-  <dependency>
-    <groupId>dev.notmarra</groupId>
-    <artifactId>notlib</artifactId>
-    <version>VERSION</version>
-    <scope>provided</scope>
-  </dependency>
+    <dependency>
+        <groupId>com.github.NotMarra</groupId>
+        <artifactId>NotLib</artifactId>
+        <version>Tag</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -31,11 +30,11 @@ NotLib requires **Java 21** and **Paper 1.21+** (Folia is also supported).
 
 ```kotlin
 repositories {
-    maven("https://repo.notmarra.dev/releases")
+    maven('https://jitpack.io')
 }
 
 dependencies {
-    compileOnly("dev.notmarra:notlib:VERSION")
+    implementation("com.github.NotMarra:NotLib:Tag")
 }
 ```
 
@@ -50,5 +49,5 @@ depend:
 
 ## Next steps
 
-- [Create your first plugin with NotPlugin](/getting-started/notplugin/)
-- [Set up a database](/database/getting-started/)
+- [Create your first plugin with NotPlugin](/notlib/getting-started/notplugin/)
+- [Set up a database](/notlib/database/getting-started/)

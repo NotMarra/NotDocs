@@ -1,7 +1,7 @@
 {
   "name": "notwiki",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "astro dev",
     "start": "astro preview --host 0.0.0.0",
@@ -10,8 +10,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.35.1",
-    "astro": "^5.6.1",
+    "@astrojs/starlight": "^0.38.1",
+    "astro": "^6.0.6",
     "sharp": "^0.34.2",
     "starlight-contributor-list": "^0.3.0"
   }

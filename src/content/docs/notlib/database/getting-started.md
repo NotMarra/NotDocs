@@ -89,6 +89,6 @@ EntityRepository<AuditLog>            logs     = db.plain(AuditLog.class);
 
 ## Next steps
 
-- [EntityRepository — CRUD operations](/database/entity-repository/)
-- [QueryBuilder — filtered queries](/database/query-builder/)
-- [Cache & write strategies](/cache/overview/)
+- [EntityRepository — CRUD operations](/notlib/database/entity-repository/)
+- [QueryBuilder — filtered queries](/notlib/database/query-builder/)
+- [Cache & write strategies](/notlib/cache/overview/)

@@ -56,7 +56,7 @@ public void initPlugin() {
 }
 ```
 
-See the [Database](/database/getting-started/) section for full details.
+See the [Database](/notlib/database/getting-started/) section for full details.
 
 ## Registering listeners and commands
 

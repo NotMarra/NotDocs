@@ -74,6 +74,8 @@ export default defineConfig({
                 "notlib/commands/overview",
                 "notlib/config/overview",
                 "notlib/scheduler/overview",
+                "notlib/chat/overview",
+                "notlib/language/overview",
               ],
             },
           ],

@@ -9,9 +9,7 @@ export default defineConfig({
     starlight({
       title: "NotWiki",
       favicon: "./logo_bg.png",
-      customCss: [
-        './src/styles/custom.css'
-      ],
+      customCss: ["./src/styles/custom.css"],
       logo: {
         src: "./src/assets/logo.svg",
       },
@@ -33,18 +31,50 @@ export default defineConfig({
             {
               label: "Have a problem?",
               link: "https://github.com/NotMarra/NotCredits/issues",
-              attrs: {target: '_blank'}
+              attrs: { target: "_blank" },
             },
             {
               label: "Download",
               link: "https://modrinth.com/plugin/notcredits",
-              attrs: {target: '_blank'}
+              attrs: { target: "_blank" },
             },
             {
               label: "Developer's API",
               link: "https://github.com/NotMarra/NotCredits/tree/main",
-              attrs: {target: '_blank'},
-              
+              attrs: { target: "_blank" },
+            },
+          ],
+        },
+        {
+          label: "NotLib",
+          items: [
+            {
+              label: "Getting started",
+              items: [
+                "notlib/getting-started/installation",
+                "notlib/getting-started/notplugin",
+              ],
+            },
+            {
+              label: "Database",
+              items: [
+                "notlib/database/getting-started",
+                "notlib/database/entity-repository",
+                "notlib/database/query-builder",
+              ],
+            },
+            {
+              label: "Cache",
+              items: ["notlib/cache/overview", "notlib/cache/not-cache"],
+            },
+            {
+              label: "Other",
+              items: [
+                "notlib/gui/overview",
+                "notlib/commands/overview",
+                "notlib/config/overview",
+                "notlib/scheduler/overview",
+              ],
             },
           ],
         },
@@ -52,6 +82,6 @@ export default defineConfig({
     }),
   ],
   server: {
-    allowedHosts: true
-  }
+    allowedHosts: true,
+  },
 });

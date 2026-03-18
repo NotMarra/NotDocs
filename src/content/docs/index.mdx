@@ -14,11 +14,30 @@ hero:
       variant: minimal
 ---
 
-import { LinkCard, Card, CardGrid } from "@astrojs/starlight/components";
+import { Card, CardGrid } from "@astrojs/starlight/components";
 
 ## What can you find here?
 
 <CardGrid stagger>
-  <LinkCard title="NotCredits" href="notcredits/getting-started/" icon="seti:java" description="A plugin that solves all your economy problems! A custom economy that doesn't need Vault or other plugins!"/>
+  <Card
+    title="NotCredits"
+    icon="seti:java"
+  >
+    A plugin that solves all your economy problems. A custom economy that
+    doesn't need Vault or other plugins.
 
+    [Read NotCredits docs](notcredits/getting-started/)
+
+  </Card>
+  <Card
+    title="NotLib"
+    icon="seti:java"
+  >
+    A library for Paper and Folia plugins, providing utilities like a
+    Folia-compatible scheduler, async database access, config management, and
+    more.
+
+    [Read NotLib docs](notlib/getting-started/installation/)
+
+  </Card>
 </CardGrid>

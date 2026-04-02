@@ -1,0 +1,234 @@
+---
+title: Commands
+description: How to create and register commands in NotLib using the Paper Brigadier API
+---
+
+import { Aside, Tabs, TabItem } from "@astrojs/starlight/components";
+
+NotLib wraps the Paper Brigadier API into a fluent builder.
+Instead of verbose Brigadier boilerplate, a few lines is all you need.
+
+## Quick start
+
+```java
+Command.of("heal", "Heals the target player")
+    .setPermission("myplugin.heal")
+    .playerArg("target")
+        .setDescription("Player to heal")
+        .onExecute(arg -> {
+            Player target = arg.get();
+            target.setHealth(target.getMaxHealth());
+            arg.cmd().getPlayer().sendMessage("Healed " + target.getName());
+        });
+```
+
+## CommandGroup
+
+Commands are registered through a `CommandGroup`. Extend it, override `notCommands()`, and call `register()` in `onEnable()`:
+
+```java
+public class MyCommands extends CommandGroup {
+    public MyCommands(NotPlugin plugin) { super(plugin); }
+
+    @Override
+    public List<Command> notCommands() {
+        return List.of(
+            buildHealCommand(),
+            buildKickCommand()
+        );
+    }
+}
+```
+
+```java
+// In your main plugin class:
+@Override
+public void onEnable() {
+    new MyCommands(this).register();
+}
+```
+
+<Aside type="tip">
+  A single plugin can have multiple `CommandGroup` classes — split them
+  logically (e.g. `AdminCommands`, `PlayerCommands`).
+</Aside>
+
+### Config-aware groups
+
+If your group needs to read values from a config file, extend `ConfigurableCommandGroup` instead:
+
+```java
+public class ShopCommands extends ConfigurableCommandGroup {
+    public ShopCommands(NotPlugin plugin) { super(plugin); }
+
+    @Override
+    public String getId() { return "shop"; }
+
+    @Override
+    public List<String> getConfigPaths() {
+        return List.of("shop.max-items", "shop.currency");
+    }
+
+    @Override
+    public List<Command> notCommands() { ... }
+}
+```
+
+`ConfigurableCommandGroup` automatically skips registration if the group is disabled in config.
+
+## Arguments
+
+### Available types
+
+| Method              | Value type            | Notes                              |
+| ------------------- | --------------------- | ---------------------------------- |
+| `literalArg`        | `String`              | Fixed keyword (`set`, `get`, …)    |
+| `stringArg`         | `String`              | Single word                        |
+| `greedyStringArg`   | `String`              | Rest of the line — must be last!   |
+| `intArg`            | `Integer`             | Supports `.setRange(min, max)`     |
+| `longArg`           | `Long`                |                                    |
+| `floatArg`          | `Float`               | Supports `.setRange(min, max)`     |
+| `doubleArg`         | `Double`              | Supports `.setRange(min, max)`     |
+| `boolArg`           | `Boolean`             | `true` / `false`                   |
+| `playerArg`         | `Player`              | Single online player               |
+| `playersArg`        | `List<Player>`        | Supports selectors (`@a`, `@r`, …) |
+| `entityArg`         | `Entity`              | Single entity                      |
+| `entitiesArg`       | `List<Entity>`        | Supports selectors                 |
+| `playerProfilesArg` | `List<PlayerProfile>` | Includes offline players           |
+
+### Fluent configuration
+
+Every argument type returns itself, so you can chain any combination of options:
+
+```java
+cmd.intArg("amount")
+   .setDescription("Number of items")
+   .setRange(1, 64)
+   .onExecute(arg -> {
+       int amount = arg.get();
+       // ...
+   });
+```
+
+### Nesting arguments
+
+Arguments can be nested to any depth — every argument is itself a `Base` and supports the same `xxxArg()` methods:
+
+```java
+Command.of("gamemode")
+    .literalArg("set")
+        .stringArg("mode")
+            .setSuggestions(List.of("survival", "creative", "adventure", "spectator"))
+            .onExecute(arg -> {
+                // /gamemode set <mode>
+                arg.cmd().getPlayer().setGameMode(
+                    GameMode.valueOf(arg.get().toUpperCase())
+                );
+            });
+```
+
+### Reading values
+
+<Tabs>
+<TabItem label="Via reference (recommended)">
+
+Hold a reference to the argument and call `.get()` directly.
+This is type-safe — a typo is a compile error, not a silent `null` at runtime.
+
+```java
+PlayerArg targetArg = cmd.playerArg("target");
+IntArg amountArg = cmd.intArg("amount").setRange(1, 64);
+
+cmd.onExecute(c -> {
+    Player target = targetArg.get();
+    int amount    = amountArg.get();
+});
+```
+
+</TabItem>
+<TabItem label="Via string path">
+
+Nested arguments are addressed using dot notation.
+Useful when the argument reference isn't easily in scope.
+
+```java
+Player target = cmd.getPlayerV("target");
+int amount    = cmd.getIntegerV("pay.amount");
+String mode   = cmd.getStringV("settings.mode");
+```
+
+Available typed getters: `getStringV`, `getIntegerV`, `getLongV`, `getFloatV`,
+`getDoubleV`, `getBooleanV`, `getPlayerV`, `getPlayersV`, `getEntityV`,
+`getEntitiesV`, `getPlayerProfilesV`.
+
+</TabItem>
+</Tabs>
+
+### Custom autocomplete
+
+Add static suggestions to any argument:
+
+```java
+cmd.stringArg("world")
+   .setSuggestions(List.of("world", "world_nether", "world_the_end"));
+```
+
+## Permissions
+
+Permissions can be set on any node — the root command, a literal branch, or a single argument:
+
+```java
+Command.of("admin")
+    .setPermission("myplugin.admin")             // /admin
+    .literalArg("reload")
+        .setPermission("myplugin.admin.reload")  // /admin reload (can be narrower or wider)
+        .onExecute(arg -> { /* ... */ });
+```
+
+## Help text
+
+If an argument has no executor, the player automatically receives the help tree for that subtree.
+You can also send it manually at any point:
+
+```java
+cmd.getHelp().sendTo(player);  // full command tree
+arg.getHelp().sendTo(player);  // subtree from this argument down
+```
+
+## Full example
+
+```java
+public class EconomyCommands extends CommandGroup {
+    public EconomyCommands(NotPlugin plugin) { super(plugin); }
+
+    @Override
+    public List<Command> notCommands() {
+        return List.of(buildMoneyCommand());
+    }
+
+    private Command buildMoneyCommand() {
+        Command cmd = Command.of("money", "Economy management")
+            .setPermission("economy.use");
+
+        // /money balance
+        cmd.literalArg("balance")
+            .setDescription("Show your current balance")
+            .onExecute(arg -> {
+                Player p = arg.cmd().getPlayer();
+                p.sendMessage("Balance: " + getBalance(p));
+            });
+
+        // /money pay <target> <amount>
+        LiteralArg pay = cmd.literalArg("pay").setDescription("Send money to a player");
+        PlayerArg target = pay.playerArg("target").setDescription("Recipient");
+        pay.intArg("amount")
+            .setDescription("Amount to send")
+            .setMin(1)
+            .onExecute(arg -> {
+                transfer(arg.cmd().getPlayer(), target.get(), arg.get());
+            });
+
+        return cmd;
+    }
+}
+```
